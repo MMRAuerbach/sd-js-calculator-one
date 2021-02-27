@@ -1,3 +1,4 @@
+/* Let's just reset some basic values */
 body, html, td {
     margin: 0;
     padding: 0;
@@ -7,6 +8,12 @@ body, html, td {
     color: #000;
 }
 
+body {
+    margin: 10px;
+}
+
+
+/* Basic CSS things for this calculator */
 .calculator {
     width: 50%;
 }
