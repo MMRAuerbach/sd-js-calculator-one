@@ -85,4 +85,5 @@ function addToDisplay(addWhat) {
 
 function showInDisplay(showWhat) {
     display.innerHTML = showWhat;
+    display.scrollLeft = 1000000;
 }
