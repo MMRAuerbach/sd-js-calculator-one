@@ -1,8 +1,7 @@
 
 
 const display = document.querySelector('.calculator__answer');
-let chosenNumberOne = null;
-let chosenNumberTwo = null;
+let numbers = [null, null];
 let operator = null;
 
 const calcButtons = document.querySelectorAll('.calculator__item');
@@ -16,70 +15,72 @@ if (calcButtons) {
             if (element.hasAttribute("data-action")) {
                 checkOperator = element.dataset.action;
                 if (checkOperator === "solution") {
-                    if (operator && chosenNumberTwo && chosenNumberOne) {
+                    if (operator && numbers[1] && numbers[0]) {
                         let solution = '';
                         switch(operator) {
                             case 'add':
-                                solution = (parseFloat(chosenNumberOne) + parseFloat(chosenNumberTwo));
+                                solution = (parseFloat(numbers[0]) + parseFloat(numbers[1]));
                                 break;
                             case 'substract':
-                                solution = (parseFloat(chosenNumberOne) - parseFloat(chosenNumberTwo));
+                                solution = (parseFloat(numbers[0]) - parseFloat(numbers[1]));
                                 break;
                             case 'divide':
-                                solution = (parseFloat(chosenNumberOne) / parseFloat(chosenNumberTwo));
+                                solution = (parseFloat(numbers[0]) / parseFloat(numbers[1]));
                                 break;
                             case 'times':
-                                solution = (parseFloat(chosenNumberOne) * parseFloat(chosenNumberTwo));
+                                solution = (parseFloat(numbers[0]) * parseFloat(numbers[1]));
                                 break;
                         }
-                        
+                        numbers[0] = solution;
+                        numbers[1] = null;
+                        operator = null;
+
                         addToDisplay('=' + solution);
                     }
                 } else if (checkOperator === "reset") {
-                    chosenNumberOne = null;
-                    chosenNumberTwo = null;
+                    numbers[0] = null;
+                    numbers[1] = null;
                     operator = null;
                     showInDisplay(0);
-                } else if (checkOperator === "power" && chosenNumberOne && !chosenNumberTwo) {
-                    solution = parseFloat(chosenNumberOne) * parseFloat(chosenNumberOne);
+                } else if (checkOperator === "power" && numbers[0] && !numbers[1]) {
+                    solution = parseFloat(numbers[0]) * parseFloat(numbers[0]);
                     addToDisplay('&sup2;=' + solution);
-                } else if (checkOperator === "root" && chosenNumberOne && !chosenNumberTwo) {
-                    solution = Math.sqrt(parseFloat(chosenNumberOne));
-                    showInDisplay('&#8730;' + chosenNumberOne + '=' + solution);
-                } else if (checkOperator === 'plusmin' && chosenNumberOne && !chosenNumberTwo) {
-                    if (parseInt(chosenNumberOne) > 0) {
-                        chosenNumberOne = '-' + chosenNumberOne;
+                } else if (checkOperator === "root" && numbers[0] && !numbers[1]) {
+                    solution = Math.sqrt(parseFloat(numbers[0]));
+                    showInDisplay('&#8730;' + numbers[0] + '=' + solution);
+                } else if (checkOperator === 'plusmin' && numbers[0] && !numbers[1]) {
+                    if (parseInt(numbers[0]) > 0) {
+                        numbers[0] = '-' + numbers[0];
                     } else {
-                        chosenNumberOne = chosenNumberOne.substring(1);
+                        numbers[0] = numbers[0].substring(1);
                     }
-                    showInDisplay(chosenNumberOne);
-                } else if (chosenNumberOne && !chosenNumberTwo) {
+                    showInDisplay(numbers[0]);
+                } else if (numbers[0] && !numbers[1]) {
                     operator = checkOperator;
                     addToDisplay(operators[operator]);
                 }
             } else {
                 elNumber = element.dataset.number;
                 addToDisplay(elNumber);
-                if (chosenNumberTwo) {
-                    chosenNumberTwo = chosenNumberTwo + elNumber;
+                if (numbers[1]) {
+                    numbers[1] = numbers[1] + elNumber;
                 } else if (operator) {
-                    chosenNumberTwo = elNumber;
-                } else if (chosenNumberOne) {
-                    chosenNumberOne = chosenNumberOne + elNumber;
+                    numbers[1] = elNumber;
+                } else if (numbers[0]) {
+                    numbers[0] = numbers[0] + elNumber;
                 } else {
-                    chosenNumberOne = elNumber;
+                    numbers[0] = elNumber;
                 }
             }
         })
     });
 }
 
-
 function addToDisplay(addWhat) {
     let oldDisplay = display.innerHTML;
     if (parseFloat(oldDisplay) === 0)
         oldDisplay = '';
-    
+        
     showInDisplay(oldDisplay + addWhat);
 }
 
